@@ -50,150 +50,116 @@
 \section*{Executive Summary}
 \vspace{-0.1cm}
 
-Analysis of \textbf{7,938 legislative bills} across all 50 states and Congress (2020--2025) reveals a crisis of geographic inequity: \textbf{52\% of American children live in low-protection states} (0--3 provisions) while only 19\% benefit from comprehensive safeguards (6--8 provisions). A child's online safety depends on their zip code.
-
-We recommend a \textbf{3-tier federal framework} that establishes uniform standards where states demonstrate consensus (81\% adopt platform liability, 64\% education, 58\% age verification), enables flexibility where they diverge moderately (23--64\% adoption areas), and preserves state control where experimentation thrives ($<$25\% adoption). This data-driven federalism approach transforms the 1:278 federal-to-state legislation ratio into coordinated national protection while closing the 95\% evidence gap.
+Analysis of \textbf{7,938 legislative bills} reveals \textbf{52\% of children live in low-protection states} while 19\% benefit from comprehensive safeguards. We propose a \textbf{3-tier federal framework} balancing parental rights, free expression, child development, and privacy through: (1) uniform federal standards where consensus exists (81\% platform liability, 58\% age verification), (2) flexible frameworks respecting state values (education, parental tools), and (3) state experimentation zones. This approach addresses technical age verification challenges through privacy-preserving methods, establishes clear platform duties of care, defines federal-state regulatory interaction, and prioritizes mental health outcomes while ensuring long-term adaptability.
 
 \vspace{-0.1cm}
 \section*{Context}
 \vspace{-0.1cm}
 
-The youth online safety debate suffers from a false narrative: that partisan gridlock prevents consensus. Our comprehensive analysis of 6,239 state bills and 1,699 federal bills (2020--2025) using natural language processing reveals the opposite---\textbf{states demonstrate remarkable agreement} on core protections. 81\% of states have adopted platform liability provisions,\footnote{See Cal. AB 2273 (Age-Appropriate Design Code Act, 2022); Utah SB 152 (Social Media Regulation Act, 2023); Ark. SB 396 (Social Media Safety Act, 2023).} 64\% mandate education programs,\footnote{See N.J. A1402 (Digital Citizenship and Internet Safety, 2020); Fla. HB 379 (K-12 Education Digital Learning, 2023).} and 58\% require age verification.\footnote{See La. Act 440 (Age Verification for Social Media, 2022); Tex. HB 18 (Securing Children Online Through Parental Empowerment Act, 2023).}
-
-The real failure is \textbf{federal inaction}: Congress has passed only 1 children's safety bill (Children and Teens' Online Privacy Protection Act, 2024)\footnote{Children and Teens' Online Privacy Protection Act, H.R. 7890, 118th Cong. (2024).} while states passed 278---a ratio of 1:278. KOSA (Kids Online Safety Act) remains stalled despite bipartisan support.\footnote{Kids Online Safety Act, S. 1409, 118th Cong. (2023) (70+ Senate cosponsors as of Nov. 2024).} This creates regulatory chaos with 48 different compliance regimes, forcing platforms to navigate an average of 3.69 requirements per state. Meanwhile, 671 bills introduced in 2025 (a record high) signal urgent legislative momentum. The question is no longer \textit{whether} to act, but \textit{how} to transform fragmented state consensus into coordinated national protection.
+NLP analysis of 7,938 bills reveals state consensus (81\% platform liability, 64\% education, 58\% age verification)\footnote{See Cal. AB 2273; Utah SB 152; La. Act 440; detailed analysis in Technical Appendix.} yet federal inaction persists: Congress passed 1 bill while states passed 278 (ratio 1:278), creating regulatory chaos with 48 compliance regimes.\footnote{KOSA (S. 1409) stalled despite 70+ Senate cosponsors; 671 bills introduced in 2025.} The challenge: balance parental rights, free expression, child development, privacy, and platform accountability in a comprehensive federal framework.
 
 \vspace{-0.1cm}
 \section*{Recommendations}
 \vspace{-0.1cm}
 
 \subsection*{Tier 1: Uniform Federal Standards (High Consensus: 50--81\% State Adoption)}
-\vspace{-0.05cm}
 
-\textbf{Establish national minimums where states already agree to eliminate geographic inequity:}
+\textbf{Establish national minimums balancing protection, rights, and innovation:}
 
 \begin{enumerate}
-    \item \textbf{Platform Duty of Care} (81\% adoption): Codify affirmative obligation to prevent foreseeable harms to minors through design choices, features, and algorithmic recommendations. Hold platforms liable for negligent violations.\footnote{Model statutes: Cal. AB 2273 (Age-Appropriate Design Code Act, 2022); Md. HB 603 (Online Child Safety Act, 2024); Minn. HF 4400 (Age-Appropriate Design Code, 2024).}
-    \item \textbf{Age Verification Standards} (58\% adoption): Mandate privacy-preserving verification using third-party services or zero-knowledge proofs. Prohibit ID document retention beyond verification. Establish safe harbor for approved methods.\footnote{Model statutes: La. Act 440 (2022); Tex. HB 18 (SCOPE Act, 2023); Utah SB 287 (2023); Ark. SB 396 (2023).}
-    \item \textbf{Data Privacy Baseline} (50\% adoption): Ban sale of minors' personal data to third parties. Require opt-in consent for data collection beyond core service provision. Mandate data minimization and annual privacy audits.\footnote{Model statutes: Children's Online Privacy Protection Act (COPPA 2.0), S. 1628, 118th Cong. (pending); Cal. CPRA (2020); Conn. SB 3 (2024); Del. HB 65 (2024).}
-    \item \textbf{Transparency \& Reporting Mandates} (38\% adoption): Require platforms to publish quarterly reports on: (1) minor user counts, (2) content moderation actions, (3) safety incident rates, (4) algorithm effects on minors. This addresses the \textbf{95\% evidence gap}---current legislation lacks quantitative data.\footnote{Model statutes: N.Y. A8148 (SAFE for Kids Act, 2023); Cal. AB 587 (Social Media Transparency Act, 2022); Md. SB 571 (2024).}
+    \item \textbf{Platform Duty of Care---Child Development \& Mental Health Focus:}\footnote{Model: Cal. AB 2273; Md. HB 603; Minn. HF 4400.} Codify affirmative obligation to prevent foreseeable harms through design, features, and algorithms. \textit{Specific requirements}: (a) Conduct quarterly \textbf{child development impact assessments} evaluating effects on ages 0--5, 6--12, 13--17 cognitive/emotional development; (b) Default to \textbf{highest privacy settings} for minors; (c) Prohibit \textbf{addictive design patterns} (infinite scroll, autoplay, manipulative notifications) for users $<$18; (d) Require \textbf{mental health safeguards}---detect/intervene on self-harm, eating disorder, suicide content with crisis resources; (e) Ban \textbf{targeted advertising} to minors based on behavioral profiles. \textit{Platform Impact}: Platforms must demonstrate designs prioritize well-being over engagement metrics. Liability: negligence standard with \$50K--5M penalties.
+    
+    \item \textbf{Privacy-Preserving Age Verification---Technical \& Privacy Balance:}\footnote{Model: La. Act 440; Tex. HB 18; Utah SB 287.} Address technical challenges through approved methods: (a) \textbf{Zero-knowledge proofs} (cryptographic age attestation without identity disclosure); (b) \textbf{Third-party age verification services} (platforms never see ID documents); (c) \textbf{Device-based verification} (parent-controlled OS-level age gates); (d) \textbf{Biometric estimation} (facial age estimation, no biometric storage). \textit{Privacy protections}: Prohibit ID retention beyond verification, mandate annual audits, establish \textbf{safe harbor} for FTC-approved methods. \textit{Parental Rights}: Parents can override verification for ages 13--17, access child's verification status. \textit{Free Expression}: Content remains accessible; verification gates access, not speech.
+    
+    \item \textbf{Data Privacy Baseline---Digital Rights \& Parental Control:}\footnote{Model: COPPA 2.0 (S. 1628); Cal. CPRA; Conn. SB 3.} Ban sale of minors' data. Require opt-in consent beyond core services. \textit{Parental Rights}: Parents access/delete child's data (ages $<$13); teens 13--17 co-consent with parents. \textit{Technical standards}: Data minimization by design, encryption at rest/transit, annual privacy audits. \textit{Adaptability}: Definition of ``personal data'' includes emerging identifiers (biometrics, location, behavioral patterns). Sunset clause: 5-year congressional review.
+    
+    \item \textbf{Transparency \& Evidence-Based Iteration:}\footnote{Model: N.Y. A8148; Cal. AB 587; Md. SB 571.} Quarterly reports: (1) minor user demographics by age band; (2) content moderation rates/appeals; (3) safety incidents (self-harm, exploitation); (4) algorithm effects on mental health; (5) \textbf{third-party researcher access} to anonymized data. \textit{Long-term Effectiveness}: Mandate 5-year \textbf{longitudinal studies} on mental health outcomes, digital wellness metrics, free expression impacts. Sunset: Full framework review after 5 years using generated evidence.
 \end{enumerate}
 
 \vspace{-0.05cm}
-\subsection*{Tier 2: Federal Framework with State Flexibility (Moderate Consensus: 23--64\%)}
-\vspace{-0.05cm}
+\subsection*{Tier 2: Federal-State Partnership Framework (Moderate Consensus: 23--64\%)}
 
-\textbf{Set federal goals but allow state implementation to respect local values:}
+\textbf{Federal goals with state flexibility---defining federal-state interaction:}
 
 \begin{enumerate}
-    \item \textbf{Digital Literacy Education} (64\% adoption): Federal funding (\$500M over 5 years) for evidence-based curricula. States design programs aligned with local education standards and community needs.\footnote{Model statutes: N.J. A1402 (2020); Fla. HB 379 (2023); Cal. AB 2316 (2024); Ill. HB 1475 (2023).}
-    \item \textbf{Parental Consent Mechanisms} (42\% adoption): Federal standard defines ``meaningful consent.'' States choose implementation methods (tools, processes, enforcement mechanisms).\footnote{Model statutes: Utah SB 152 (Social Media Regulation Act, 2023); Ohio HB 382 (2024); Ark. SB 396 (2023).}
-    \item \textbf{Content Moderation Guidelines} (23\% adoption): Federal establishes harm categories (e.g., self-harm promotion, sexual exploitation). States add region-specific priorities while respecting First Amendment. Model: Texas HB 18, Louisiana Act 440, Montana SB 419.
+    \item \textbf{Digital Literacy \& Wellness Education:}\footnote{Model: N.J. A1402; Fla. HB 379; Cal. AB 2316; Ill. HB 1475.} \textit{Federal role}: \$500M over 5 years for evidence-based curricula covering: digital citizenship, mental health awareness, critical media literacy, privacy protection, healthy technology use. \textit{State role}: Design age-appropriate programs (K-12) aligned with local standards. \textit{Federal-state interaction}: States submit plans for federal approval; feds provide curriculum frameworks, evaluation metrics. \textit{Digital Wellness}: Require schools teach recognition of addictive design, social comparison harms, strategies for healthy boundaries.
+    
+    \item \textbf{Parental Rights \& Consent Mechanisms:}\footnote{Model: Utah SB 152; Ohio HB 382; Ark. SB 396.} \textit{Federal standard}: Define ``meaningful consent'' as: affirmative, specific, informed, freely given. Require platforms provide \textbf{parental control dashboards} showing: time spent, contacts, content viewed, privacy settings. \textit{State flexibility}: Choose implementation---mandatory parental approval (ages $<$16), opt-out systems, notification-only. \textit{Federal-state interaction}: Federal sets minimum; states can impose stricter. \textit{Balancing act}: Teens 16--17 retain autonomy for expression/privacy with parental visibility option.
+    
+    \item \textbf{Content Moderation \& Free Expression:} \textit{Federal baseline}: Establish harm categories requiring intervention: (a) child sexual abuse material (CSAM); (b) self-harm/suicide promotion; (c) eating disorder glorification; (d) violent extremism recruiting minors. \textit{State additions}: Region-specific priorities (e.g., fentanyl awareness, local safety concerns) while respecting First Amendment. \textit{Free Expression protections}: Platforms cannot remove \textit{political speech, news, educational content, artistic expression}. Independent appeals process required. \textit{Federal-state interaction}: States notify feds of additional categories; feds review for constitutional compliance.
 \end{enumerate}
 
 \vspace{-0.05cm}
-\subsection*{Tier 3: State Control (Low Consensus: $<$25\% Adoption)}
-\vspace{-0.05cm}
+\subsection*{Tier 3: State Innovation Zones (Low Consensus: $<$25\% Adoption)}
 
-\textbf{Preserve state experimentation where no consensus exists:} School-specific technology policies (19\% adoption: e.g., Virginia HB 1424, Indiana SB 179), time limit restrictions (7\% adoption: e.g., proposed in NY, CT), design standards for platform features (2\% adoption: e.g., California AB 2408), state-specific enforcement mechanisms, and implementation timelines based on local resources and capacity.
+\textbf{Preserve experimentation for emerging issues---adaptability mechanism:}
 
-\vspace{-0.1cm}
-\section*{Analysis}
-\vspace{-0.1cm}
+\textit{State authority}: (1) \textbf{School technology policies} (19\% adoption)---device bans, Wi-Fi restrictions, classroom rules; (2) \textbf{Time limit experiments} (7\% adoption)---daily usage caps (e.g., 2 hours), night-time restrictions (10pm--6am); (3) \textbf{Platform design standards} (2\% adoption)---UI requirements, notification limits, feature restrictions; (4) \textbf{State-specific enforcement}---AG authority, civil penalties, private rights of action.
 
-\subsection*{Quantifying Geographic Inequity}
-\vspace{-0.05cm}
+\textit{Federal-state interaction}: States share results with federal clearinghouse. Successful experiments ($>$3 states, positive outcomes) considered for federal adoption in 5-year review. \textit{Adaptability}: As technology evolves (AI chatbots, VR social platforms, neural interfaces), states test regulations before federal action. \textit{Preemption limits}: Federal cannot preempt state laws more protective than Tier 1 minimums.
 
-\begin{wrapfigure}{r}{0.38\textwidth}
-\vspace{-0.5cm}
-\centering
-\includegraphics[width=0.36\textwidth]{visualizations/geographic_inequity_analysis.png}
-\caption{\footnotesize Geographic Inequity: 52\% low protection.}
-\vspace{-0.4cm}
-\end{wrapfigure}
+\section*{Evidence Base}
 
-We calculated a \textbf{Geographic Inequity Index (GII)} measuring protection variation across states. GII = 2.06 on a 0--5 scale, indicating high disparity. State distribution: 52\% low-protection (0--3 provisions), 29\% medium (4--5), 19\% high (6--8).
+Our 3-tier framework derives from NLP analysis of 7,938 bills identifying state consensus patterns (see Technical Appendix for: Geographic Inequity Index = 2.06, state adoption rates, federal-to-state ratio 1:278, methodology). Key finding: 81\% platform liability consensus, yet 52\% of children live in low-protection states. Framework addresses 95\% evidence gap through mandatory transparency/longitudinal studies.
 
-\textbf{Real-world impact:} A teenager in California benefits from 8 comprehensive protections (platform liability, age verification, data privacy, education, parental tools, transparency, design standards, enforcement). A peer in Wyoming has zero. This violates basic equity principles.
+\section*{Why This Framework}
 
-\vspace{-0.05cm}
-\subsection*{Hidden Consensus in State Legislation}
-\vspace{-0.05cm}
+\textbf{Rejected alternatives}: (1) \textit{Status quo}---perpetuates 52\% low-protection crisis; Commerce Clause grants federal authority;\footnote{U.S. Const. art. I, \S~8, cl. 3; 47 U.S.C. \S~230 precedent.} (2) \textit{Federal preemption}---eliminates beneficial state experimentation;\footnote{\textit{NetChoice} litigation demonstrates innovation value.} (3) \textit{Self-regulation}---decade of failures (Instagram controls post-Utah SB 152 only).\footnote{Frances Haugen testimony (2021).}
 
-\textbf{NLP analysis} of 6,239 state bills identified 10 policy provisions. Adoption rates reveal surprising agreement: Platform Liability (81\%), Enforcement (71\%), Education (64\%), Age Verification (58\%), Data Privacy (50\%), Transparency (38\%), Parental Consent (42\%), Content Moderation (25\%), Time Limits (19\%), Design Standards (2\%).
+\textbf{Our framework succeeds}: (1) \textbf{Balances competing interests}---parental rights (dashboards, co-consent) + free expression (content-neutral design rules) + child development (mental health safeguards) + privacy (zero-knowledge verification); (2) \textbf{Addresses technical challenges}---4 approved age verification methods, safe harbor reduces litigation; (3) \textbf{Defines federal-state interaction}---clear tiers prevent conflicts; (4) \textbf{Ensures adaptability}---5-year sunset, state innovation zones, technology-neutral language; (5) \textbf{Data-driven}---builds on 81\% consensus;\footnote{KOSA (S. 1409) momentum: 70+ cosponsors.} (6) \textbf{Long-term effectiveness}---longitudinal studies, evidence-based iteration.
 
-\noindent\textbf{Interpretation:} Despite perceptions of partisan deadlock, \textbf{4 out of 5 states agree} on platform accountability. The consensus exists---federal leadership has been absent.
+\section*{Implementation \& Critical Trade-Offs}
 
-\vspace{-0.05cm}
-\subsection*{Federal Inaction Crisis}
-\vspace{-0.05cm}
+\subsection*{Phased Rollout (Addressing Platform Impact)}
+\textbf{Y1:} Transparency mandates (establish baseline). \textbf{Y2:} Duty of care + data privacy (existing state models: CA AB 2273). \textbf{Y3:} Age verification + education funding (technical deployment, educator training). \textbf{Y3+:} Small platforms ($<$1M users) deadline---\textit{innovation protection}.
 
-\begin{wrapfigure}{r}{0.38\textwidth}
-\vspace{-0.5cm}
-\centering
-\includegraphics[width=0.36\textwidth]{visualizations/legislative_momentum_analysis.png}
-\caption{\footnotesize 671 bills in 2025: urgent momentum.}
-\vspace{-0.4cm}
-\end{wrapfigure}
+\subsection*{Balancing Fundamental Rights}
+\textbf{Free Expression:} Targets \textit{design} (algorithms, addictive features) not \textit{content} (speech). Political speech, news, education, art fully protected. Independent appeals required.\footnote{\textit{Ginsberg}, 390 U.S. 629 (1968); \textit{Brown}, 564 U.S. 786 (2011).} \textit{Trade-off}: Some lawful-but-harmful content remains accessible; mitigation through design changes (reduce amplification) not removal.
 
-From 2020--2024, Congress passed \textbf{1 federal bill} addressing youth online safety. In the same period, states passed \textbf{278 bills}---a ratio of 1:278. This creates: (1) \textbf{Compliance chaos}---platforms navigate 48 different regimes (avg. 3.69 requirements/state, std. dev. 1.63); (2) \textbf{Regulatory arbitrage}---platforms optimize for least restrictive states; (3) \textbf{Interstate commerce disruption}---TikTok operates differently in Texas vs. California; (4) \textbf{Innovation uncertainty}---startups cannot predict nationwide compliance costs (\$2--5M for patchwork vs. \$500K--1M for single standard).
+\textbf{Privacy vs. Safety:} Zero-knowledge proofs, third-party verification, device-based gates balance verification need with privacy. \textit{Trade-off}: No verification method is 100\% accurate (biometric estimation ~95\% accurate); accept false positives/negatives vs. identity surveillance. Annual audits + safe harbor incentivize best practices.
 
-\vspace{-0.05cm}
-\subsection*{The 95\% Evidence Gap}
-\vspace{-0.05cm}
+\textbf{Parental Rights vs. Teen Autonomy:} Ages $<$13: full parental control. Ages 13--15: co-consent model (both parent + teen approve). Ages 16--17: teen autonomy with parental visibility option. \textit{Trade-off}: May not satisfy parents seeking total control or teens seeking full independence; balances developmental needs.
 
-We analyzed 500 randomly sampled bills for quantitative evidence. Results: 95.7\% lack privacy effectiveness data, 95.0\% lack platform impact data, 100\% lack compliance cost data, 95.5\% lack age verification efficacy data. \textbf{Implication:} Policymakers legislate without knowing if interventions work. Federal transparency mandates (Tier 1) will generate the data needed for evidence-based iteration. Include 5-year sunset clause forcing congressional review with newly available evidence.
+\textbf{Platform Impact---Innovation vs. Compliance:} \$500K--1M compliance cost for uniform federal standard vs. \$2--5M for 48-state patchwork. Small platform exemption protects startups. Safe harbors reduce litigation risk. \textit{Trade-off}: Large platforms absorb costs; some features may be discontinued (infinite scroll, targeted ads to minors) affecting business models.
 
-\vspace{-0.05cm}
-\subsection*{Methodology}
-\vspace{-0.05cm}
+\textbf{Mental Health Outcomes:} Longitudinal studies track: anxiety/depression rates, sleep quality, social development, self-esteem, academic performance. \textit{Trade-off}: 5-year data lag before conclusive evidence; sunset clause forces review but delayed response to harms.
 
-\textbf{Data:} Integrity Institute Legislative Tracker (7,938 bills). \textbf{NLP:} Python with spaCy and NLTK for provision extraction, TF-IDF vectorization for thematic clustering, sentiment analysis for framing detection. \textbf{Statistical Analysis:} Geographic Inequity Index calculated as coefficient of variation across state protection scores. \textbf{Validation:} Manual review of top 50 bills per provision type. Full scripts and datasets available at \href{https://github.com/Wv-Anterola/MIT-Policy-Hackathon}{github.com/Wv-Anterola/MIT-Policy-Hackathon}.
+\textbf{Enforcement:} FTC leads Tier 1;\footnote{FTC Act \S~5; COPPA model, 16 C.F.R. Part 312.} states handle Tiers 2--3;\footnote{Utah SB 152 model: AG enforcement, \$2,500/violation.} private action for egregious violations.\footnote{Cal. Civ. Code \S~1798.150.} \textit{Trade-off}: Multi-agency coordination challenges; clear tier delineation minimizes conflicts.
 
-\vspace{-0.1cm}
-\section*{Alternatives Considered}
-\vspace{-0.1cm}
-
-\subsection*{Alternative 1: Pure State Control (Status Quo)}
-\textbf{Rejected.} Perpetuates 52\% low-protection crisis. Data crosses state borders---TikTok doesn't stop at the Mississippi River. Commerce Clause grants federal authority over interstate digital platforms.\footnote{U.S. Const. art. I, \S~8, cl. 3 (``To regulate Commerce...among the several States'').} Current patchwork costs platforms \$2--5M vs. \$500K--1M for uniform standard. Precedent: CDA Section 230 established federal framework for internet platforms.\footnote{47 U.S.C. \S~230 (Communications Decency Act, 1996).}
-
-\subsection*{Alternative 2: Comprehensive Federal Preemption}
-\textbf{Rejected.} Politically infeasible due to states' rights concerns. Eliminates beneficial experimentation in low-consensus areas (design standards: 2\% adoption needs testing). One-size-fits-all approach ignores regional differences. Recent litigation demonstrates state innovation value despite legal challenges.\footnote{See \textit{NetChoice, LLC v. Paxton}, 49 F.4th 439 (5th Cir. 2022), \textit{vacated and remanded}, 144 S. Ct. 2383 (2024); \textit{NetChoice, LLC v. Moody}, 34 F.4th 1196 (11th Cir. 2022), \textit{vacated and remanded}, 144 S. Ct. 2383 (2024).}
-
-\subsection*{Alternative 3: Self-Regulation by Tech Platforms}
-\textbf{Rejected.} Decade of voluntary commitments failed. Instagram introduced parental controls (Sept. 2023) only after Utah SB 152 and Arkansas SB 396 threatened action. Meta's ``Family Center'' rollout followed California AB 2273 passage. Perverse incentives: engagement-maximizing algorithms fundamentally conflict with child safety.\footnote{See \textit{Protecting Kids Online: Testimony from a Facebook Whistleblower}: Hearing Before the Subcomm. on Consumer Protection, Product Safety, and Data Security of the S. Comm. on Commerce, Science, and Transportation, 117th Cong. (2021) (testimony of Frances Haugen).}
-
-\subsection*{Why Our 3-Tier Framework Is Superior}
-(1) \textbf{Data-driven}---tiers determined by actual state consensus levels, not ideology; (2) \textbf{Respects federalism}---preserves state flexibility where divergence exists; (3) \textbf{Politically feasible}---builds on 81\% platform liability consensus and bipartisan KOSA momentum;\footnote{Kids Online Safety Act, S. 1409, 118th Cong. (2023) (70+ Senate cosponsors, including bipartisan leadership support).} (4) \textbf{Future-proof}---technology-neutral language, sunset provisions, mandated evidence collection; (5) \textbf{Equitable}---guarantees minimum protections for all children.
-
-\vspace{-0.1cm}
-\section*{Implementation \& Trade-Offs}
-\vspace{-0.1cm}
-
-\subsection*{Phased Rollout}
-\textbf{Year 1:} Transparency mandates (generate baseline data). \textbf{Year 2:} Platform liability and data privacy baseline (high-consensus areas with existing state models like California AB 2273, effective July 2024). \textbf{Year 3:} Age verification and education funding (complex implementation requiring technical solutions and educator training, learning from Louisiana Act 440 enforcement). \textbf{Year 3+:} Small platforms ($<$1M users) compliance deadline (startup protection, following California CPRA thresholds).
-
-\subsection*{Addressing Key Trade-Offs}
-\textbf{First Amendment:} Framework targets platform \textit{design} (algorithms, features), not \textit{content} (speech). Government can protect minors without violating First Amendment when narrowly tailored.\footnote{\textit{Ginsberg v. New York}, 390 U.S. 629 (1968) (upholding restrictions on minors' access to harmful materials); \textit{Brown v. Entm't Merchs. Ass'n}, 564 U.S. 786, 805 (2011) (noting ``speech about violence'' to minors can be regulated under compelling interest).}
-
-\textbf{Privacy vs. Verification:} Mandate privacy-preserving methods (zero-knowledge proofs, third-party attestation). Prohibit ID retention. Annual privacy audits ensure compliance.
-
-\textbf{Innovation:} Current regulatory chaos costs platforms \textit{more} than standardization. Phased rollout protects small platforms. Safe harbors reduce liability uncertainty.
-
-\textbf{Enforcement:} FTC leads with state attorney general partnership for Tier 1.\footnote{FTC Act \S~5, 15 U.S.C. \S~45 (unfair or deceptive practices); model: COPPA enforcement structure, 16 C.F.R. Part 312.} State enforcement for Tiers 2--3.\footnote{Model: Utah SB 152 (AG enforcement with civil penalties up to \$2,500 per violation).} Private right of action for egregious violations.\footnote{Model: Cal. Civ. Code \S~1798.150 (CPRA private right of action for data breaches).}
-
-\vspace{-0.1cm}
 \section*{Conclusion}
-\vspace{-0.1cm}
 
-The data speaks clearly: \textbf{We have consensus} (81\% on platform liability, 64\% on education), \textbf{we have momentum} (671 bills in 2025, record high), and \textbf{we have a solution} (data-driven 3-tier framework). The only missing ingredient is political will.
+This framework delivers a \textbf{comprehensive federal approach} balancing: (1) \textbf{Parental rights}---control dashboards, co-consent, data access; (2) \textbf{Free expression}---design rules, content neutrality, appeals; (3) \textbf{Child development}---age-appropriate safeguards, mental health interventions; (4) \textbf{Privacy}---zero-knowledge verification, no ID retention, minimization; (5) \textbf{Platform accountability}---duty of care, transparency, liability; (6) \textbf{Federal-state harmony}---clear tier delineation, innovation zones; (7) \textbf{Adaptability}---sunset clauses, technology-neutral language, evidence-based iteration; (8) \textbf{Long-term effectiveness}---longitudinal studies, mental health tracking.
 
-By transforming fragmented state action into coordinated federal leadership, we can ensure that every American child---whether in California or Wyoming---enjoys equal protection online. The alternative is continued geographic inequity where a teenager's digital safety depends on their zip code. The cost of continued inaction is measured in children's safety, mental health, and fundamental equity.
+We have \textbf{consensus} (81\% platform liability), \textbf{momentum} (671 bills, KOSA support), and \textbf{tested models} (28 state laws). The alternative: continued inequity where zip code determines digital safety. \textbf{The time to act is now.}
 
-\textbf{The time to act is now.}
+\newpage
+\section*{Technical Appendix}
 
-\vspace{0.2cm}
-\section*{Bibliography}
-\vspace{-0.1cm}
+\subsection*{A. Data Analysis \& Methodology}
+
+\textbf{Geographic Inequity Index (GII):} Calculated as coefficient of variation across state protection scores. GII = 2.06 (0--5 scale) indicates high disparity. Distribution: 52\% low-protection (0--3 provisions), 29\% medium (4--5), 19\% high (6--8). California: 8 protections. Wyoming: 0.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{visualizations/geographic_inequity_analysis.png}
+\caption{Geographic Inequity: 52\% of states provide low protection.}
+\end{figure}
+
+\textbf{State Consensus Analysis:} NLP analysis of 6,239 state bills identified 10 provisions. Adoption: Platform Liability 81\%, Enforcement 71\%, Education 64\%, Age Verification 58\%, Data Privacy 50\%, Transparency 38\%, Parental Consent 42\%, Content Moderation 25\%, Time Limits 19\%, Design Standards 2\%.
+
+\textbf{Federal Inaction:} 2020--2024: Congress passed 1 bill, states passed 278 (ratio 1:278). 2025: 671 bills introduced (record). Compliance chaos: 48 regimes, avg. 3.69 requirements/state (std. dev. 1.63). Cost impact: \$2--5M patchwork vs. \$500K--1M uniform.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{visualizations/legislative_momentum_analysis.png}
+\caption{671 bills in 2025 demonstrate urgent legislative momentum.}
+\end{figure}
+
+\textbf{Evidence Gap:} 500 sampled bills: 95.7\% lack privacy data, 95.0\% lack impact data, 100\% lack cost data, 95.5\% lack verification efficacy data.
+
+\textbf{Methodology:} Integrity Institute Legislative Tracker (7,938 bills, 2020--2025). Python NLP: spaCy/NLTK for provision extraction, TF-IDF vectorization, sentiment analysis. Validation: manual review of top 50 bills/provision. Code/data: \href{https://github.com/Wv-Anterola/MIT-Policy-Hackathon}{github.com/Wv-Anterola/MIT-Policy-Hackathon}.
+
+\subsection*{B. Bibliography}
 
 \subsection*{Federal Legislation}
 \begin{itemize}[leftmargin=*,itemsep=1pt]
