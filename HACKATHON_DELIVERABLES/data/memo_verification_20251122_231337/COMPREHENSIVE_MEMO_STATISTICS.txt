@@ -1,0 +1,152 @@
+================================================================================
+MIT HACKATHON POLICY MEMO - DATA VERIFICATION REPORT
+================================================================================
+
+Generated: 2025-11-22 23:13:44
+
+CRITICAL: ALL ANALYSES USE PASSED, CHILDREN-RELATED BILLS ONLY
+
+================================================================================
+KEY STATISTICS
+================================================================================
+
+📊 DATASET:
+   Total bills: 7,938
+   Passed state bills: 913
+   Children-related passed: 334
+
+📍 GEOGRAPHIC INEQUITY:
+   Low: 25 (56%)
+   Medium: 12 (27%)
+   High: 8 (18%)
+   GII: 2.19
+
+🤝 STATE CONSENSUS:
+   Digital Literacy Education: 62% (28 states)
+   Platform Liability: 58% (26 states)
+   Data Privacy Standards: 47% (21 states)
+   Age Verification: 44% (20 states)
+   Mental Health Protections: 31% (14 states)
+   Transparency & Reporting: 29% (13 states)
+   Content Safety Standards: 27% (12 states)
+   Parental Control Tools: 24% (11 states)
+
+🏛️ FEDERAL INACTION:
+   State bills: 334
+   Federal bills: 3
+   Ratio: 111:1
+
+🔬 EVIDENCE GAPS:
+   Evidence gap: 76.9%
+
+
+================================================================================
+METHODOLOGY
+================================================================================
+
+DATASET OVERVIEW
+--------------------------------------------------------------------------------
+
+DATASET OVERVIEW METHODOLOGY:
+- Total bills in dataset = State bills (6,239) + Federal bills (1,699) = 7,938
+- Passed state bills: 913 (14.6% of state bills)
+- Children-related passed bills (ANALYSIS FOCUS): 334 (36.6% of passed bills)
+- Date range (children-related passed bills): 2014-02-20 to 2025-06-17
+
+CRITICAL FILTER APPLIED:
+All subsequent analyses use ONLY the 334 bills that are:
+1. PASSED (enacted into law)
+2. CHILDREN-RELATED (contain keywords related to minors, youth, online safety, etc.)
+
+Data source: Integrity Institute Technology Policy Legislative Tracker
+
+
+GEOGRAPHIC INEQUITY
+--------------------------------------------------------------------------------
+
+GEOGRAPHIC INEQUITY METHODOLOGY:
+- Data source: 334 PASSED, CHILDREN-RELATED state bills
+- Analyzed 45 states with children's online safety legislation
+- Scored each state on 8 key provisions (0-8 scale):
+  1. Transparency & Reporting
+  2. Digital Literacy Education
+  3. Data Privacy Standards
+  4. Platform Liability
+  5. Age Verification
+  6. Mental Health Protections
+  7. Content Safety Standards
+  8. Parental Control Tools
+
+- Classification:
+  * Low Protection (0-3 provisions): 25 states (55.6%)
+  * Medium Protection (4-5 provisions): 12 states (26.7%)
+  * High Protection (6-8 provisions): 8 states (17.8%)
+
+- Geographic Inequity Index (GII):
+  * Standard Deviation: 2.19
+  * Coefficient of Variation: 0.68
+
+- Score Distribution:
+  * Mean: 3.22
+  * Std Dev: 2.19
+  * Min: 0
+  * Max: 8
+
+
+STATE CONSENSUS
+--------------------------------------------------------------------------------
+
+STATE CONSENSUS METHODOLOGY:
+- Analyzed 45 states with passed children's online safety legislation
+- Calculated percentage of states that have enacted each provision
+
+Provision Adoption Rates:
+  * Digital Literacy Education: 28/45 states (62.2%)
+  * Platform Liability: 26/45 states (57.8%)
+  * Data Privacy Standards: 21/45 states (46.7%)
+  * Age Verification: 20/45 states (44.4%)
+  * Mental Health Protections: 14/45 states (31.1%)
+  * Transparency & Reporting: 13/45 states (28.9%)
+  * Content Safety Standards: 12/45 states (26.7%)
+  * Parental Control Tools: 11/45 states (24.4%)
+
+
+FEDERAL INACTION
+--------------------------------------------------------------------------------
+
+FEDERAL INACTION METHODOLOGY:
+- State bills passed (children-related): 334
+- Federal bills passed (children-related): 3
+- State-to-Federal ratio: 111:1
+- Bills introduced in 2025: 2,461
+- Compliance regimes: 45
+- Avg requirements/state: 3.22
+- Std deviation: 2.19
+
+
+LEGISLATIVE MOMENTUM
+--------------------------------------------------------------------------------
+
+LEGISLATIVE MOMENTUM:
+- 2025 bills introduced: 2,461
+- Comprehensive frameworks: 8 states
+
+
+EVIDENCE GAPS
+--------------------------------------------------------------------------------
+
+EVIDENCE GAP METHODOLOGY:
+- Sampled 334 bills
+- Evidence gap: 76.9%
+- Privacy data gap: 93.1%
+- Impact data gap: 90.4%
+- Cost data gap: 92.8%
+
+
+COMPLIANCE COMPLEXITY
+--------------------------------------------------------------------------------
+
+COMPLIANCE COMPLEXITY:
+- Number of regimes: 45
+- Avg requirements: 3.22
+- Std deviation: 2.19

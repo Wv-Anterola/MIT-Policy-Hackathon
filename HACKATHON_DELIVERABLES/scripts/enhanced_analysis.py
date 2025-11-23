@@ -25,6 +25,10 @@ class EnhancedPolicyAnalyzer:
         if federal_file:
             self.federal_df = pd.read_csv(federal_file, encoding='utf-8', low_memory=False)
         
+        # Filter for passed bills only
+        self.state_df = self.state_df[self.state_df['Status'].str.contains('Passed', na=False, case=False)]
+        print(f"Loaded {len(self.state_df)} passed bills for analysis\n")
+        
         # Create output directory
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.output_dir = f"enhanced_results/analysis_{timestamp}"
@@ -32,25 +36,302 @@ class EnhancedPolicyAnalyzer:
         
         print(f"Output directory: {self.output_dir}\n")
     
+    def generate_descriptive_statistics(self):
+        """Generate comprehensive descriptive statistics about the dataset"""
+        print("="*80)
+        print("DESCRIPTIVE STATISTICS")
+        print("="*80)
+        
+        stats_report = []
+        
+        # Overall dataset statistics
+        stats_report.append("\\n=== DATASET OVERVIEW ===")
+        stats_report.append(f"Total passed bills analyzed: {len(self.state_df):,}")
+        stats_report.append(f"Number of states/territories: {self.state_df['State'].nunique()}")
+        
+        # Handle date range safely
+        if 'status_date' in self.state_df.columns:
+            date_series = pd.to_datetime(self.state_df['status_date'], errors='coerce')
+            valid_dates = date_series.dropna()
+            if len(valid_dates) > 0:
+                stats_report.append(f"Date range: {valid_dates.min().strftime('%Y-%m-%d')} to {valid_dates.max().strftime('%Y-%m-%d')}")
+            else:
+                stats_report.append("Date range: Not available")
+        else:
+            stats_report.append("Date range: Not available")
+        
+        # Children-focused bill statistics
+        children_keywords = ['child', 'minor', 'youth', 'student', 'teen', 'kid', 'adolescent']
+        mask = pd.Series([False] * len(self.state_df), index=self.state_df.index)
+        for keyword in children_keywords:
+            mask |= (
+                self.state_df['Name'].str.contains(keyword, case=False, na=False) |
+                self.state_df['Description'].str.contains(keyword, case=False, na=False)
+            )
+        children_bills = self.state_df[mask]
+        
+        stats_report.append(f"\nChildren-focused bills: {len(children_bills):,} ({len(children_bills)/len(self.state_df)*100:.1f}%)")
+        stats_report.append(f"States with children-focused legislation: {children_bills['State'].nunique()}")
+        
+        # State-level statistics
+        stats_report.append("\n=== STATE-LEVEL STATISTICS ===")
+        bills_per_state = self.state_df['State'].value_counts()
+        stats_report.append(f"Bills per state (mean): {bills_per_state.mean():.2f}")
+        stats_report.append(f"Bills per state (median): {bills_per_state.median():.0f}")
+        stats_report.append(f"Bills per state (std dev): {bills_per_state.std():.2f}")
+        stats_report.append(f"Bills per state (min): {bills_per_state.min()}")
+        stats_report.append(f"Bills per state (max): {bills_per_state.max()}")
+        stats_report.append(f"\nTop 5 most active states:")
+        for state, count in bills_per_state.head(5).items():
+            stats_report.append(f"  {state}: {count} bills")
+        
+        # Temporal statistics
+        if 'status_date' in self.state_df.columns:
+            self.state_df['Year'] = pd.to_datetime(self.state_df['status_date'], errors='coerce').dt.year
+            yearly_counts = self.state_df['Year'].value_counts().sort_index()
+            stats_report.append("\n=== TEMPORAL TRENDS ===")
+            stats_report.append(f"Bills by year (mean): {yearly_counts.mean():.2f}")
+            stats_report.append(f"Bills by year (median): {yearly_counts.median():.0f}")
+            stats_report.append(f"Peak year: {yearly_counts.idxmax()} ({yearly_counts.max()} bills)")
+            stats_report.append(f"\nYearly breakdown:")
+            for year, count in yearly_counts.items():
+                if pd.notna(year):
+                    stats_report.append(f"  {int(year)}: {count} bills")
+        
+        # Topic/keyword statistics
+        stats_report.append("\n=== TOPIC PREVALENCE ===")
+        topics = {
+            'Age Verification': ['age verif', 'age assurance', 'age check'],
+            'Data Privacy': ['data privacy', 'data protection', 'personal data'],
+            'Platform Liability': ['liability', 'duty of care'],
+            'Mental Health': ['mental health', 'addiction', 'wellness'],
+            'Transparency': ['transparency', 'disclosure', 'report'],
+            'Education': ['education', 'training', 'literacy'],
+            'Parental Control': ['parental consent', 'parental control'],
+            'Content Safety': ['content moderation', 'harmful content']
+        }
+        
+        topic_counts = {}
+        for topic, keywords in topics.items():
+            mask = pd.Series([False] * len(children_bills), index=children_bills.index)
+            for kw in keywords:
+                mask |= children_bills['Description'].str.contains(kw, case=False, na=False)
+            count = mask.sum()
+            pct = count / len(children_bills) * 100 if len(children_bills) > 0 else 0
+            topic_counts[topic] = (count, pct)
+            stats_report.append(f"{topic}: {count} bills ({pct:.1f}%)")
+        
+        # Bill description length statistics
+        stats_report.append("\n=== BILL DESCRIPTION CHARACTERISTICS ===")
+        desc_lengths = children_bills['Description'].str.len()
+        stats_report.append(f"Description length (mean): {desc_lengths.mean():.0f} characters")
+        stats_report.append(f"Description length (median): {desc_lengths.median():.0f} characters")
+        stats_report.append(f"Description length (std dev): {desc_lengths.std():.0f} characters")
+        
+        # Generate visualizations
+        self._create_descriptive_visualizations(bills_per_state, yearly_counts, topic_counts, children_bills)
+        
+        # Print and save statistics
+        print("\n".join(stats_report))
+        
+        # Save to file
+        with open(f"{self.output_dir}/descriptive_statistics.txt", 'w') as f:
+            f.write("\n".join(stats_report))
+        
+        # Create summary statistics table
+        summary_stats = pd.DataFrame({
+            'Metric': [
+                'Total Bills',
+                'Children-Focused Bills',
+                'States/Territories',
+                'Mean Bills per State',
+                'Median Bills per State',
+                'Std Dev Bills per State',
+                'Date Range Start',
+                'Date Range End'
+            ],
+            'Value': [
+                f"{len(self.state_df):,}",
+                f"{len(children_bills):,} ({len(children_bills)/len(self.state_df)*100:.1f}%)",
+                f"{self.state_df['State'].nunique()}",
+                f"{bills_per_state.mean():.2f}",
+                f"{bills_per_state.median():.0f}",
+                f"{bills_per_state.std():.2f}",
+                valid_dates.min().strftime('%Y-%m-%d') if len(valid_dates) > 0 else 'N/A',
+                valid_dates.max().strftime('%Y-%m-%d') if len(valid_dates) > 0 else 'N/A'
+            ]
+        })
+        summary_stats.to_csv(f"{self.output_dir}/summary_statistics.csv", index=False)
+        
+        # Create topic prevalence table
+        topic_df = pd.DataFrame([
+            {'Topic': topic, 'Bills': count, 'Percentage': f"{pct:.1f}%"}
+            for topic, (count, pct) in sorted(topic_counts.items(), key=lambda x: x[1][0], reverse=True)
+        ])
+        topic_df.to_csv(f"{self.output_dir}/topic_prevalence.csv", index=False)
+        
+        print(f"\n📊 Descriptive Statistics:")
+        print(f"   Summary: {len(self.state_df):,} total bills, {len(children_bills):,} children-focused")
+        print(f"   Coverage: {self.state_df['State'].nunique()} states/territories")
+        print(f"   Most common topic: {max(topic_counts.items(), key=lambda x: x[1][0])[0]}")
+        
+        return children_bills
+    
+    def _create_descriptive_visualizations(self, bills_per_state, yearly_counts, topic_counts, children_bills):
+        """Create comprehensive visualizations for descriptive statistics"""
+        
+        # Create 2x3 grid of visualizations
+        fig = plt.figure(figsize=(20, 12))
+        gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
+        
+        # 1. Top 15 Most Active States (Bar Chart)
+        ax1 = fig.add_subplot(gs[0, 0])
+        top_states = bills_per_state.head(15)
+        colors = plt.cm.viridis(np.linspace(0.3, 0.9, len(top_states)))
+        bars = ax1.barh(range(len(top_states)), top_states.values, color=colors, edgecolor='black', alpha=0.8)
+        ax1.set_yticks(range(len(top_states)))
+        ax1.set_yticklabels(top_states.index)
+        ax1.set_xlabel('Number of Passed Bills', fontweight='bold', fontsize=11)
+        ax1.set_title('Top 15 Most Active States\n(All Passed Bills)', fontweight='bold', fontsize=13)
+        ax1.grid(axis='x', alpha=0.3)
+        ax1.invert_yaxis()
+        for i, v in enumerate(top_states.values):
+            ax1.text(v + 1, i, str(v), va='center', fontweight='bold', fontsize=9)
+        
+        # 2. Bills Over Time (Line + Bar Chart)
+        ax2 = fig.add_subplot(gs[0, 1])
+        years = [int(y) for y in yearly_counts.index if pd.notna(y)]
+        counts = [yearly_counts[y] for y in yearly_counts.index if pd.notna(y)]
+        ax2.bar(years, counts, color='#3498db', edgecolor='black', alpha=0.7, label='Annual Bills')
+        ax2.plot(years, counts, color='#e74c3c', linewidth=3, marker='o', markersize=10, label='Trend')
+        ax2.set_xlabel('Year', fontweight='bold', fontsize=11)
+        ax2.set_ylabel('Number of Bills', fontweight='bold', fontsize=11)
+        ax2.set_title('Legislative Activity Over Time\n(2023-2025)', fontweight='bold', fontsize=13)
+        ax2.legend(fontsize=10)
+        ax2.grid(axis='y', alpha=0.3)
+        for i, (year, count) in enumerate(zip(years, counts)):
+            ax2.text(year, count + 10, str(count), ha='center', fontweight='bold', fontsize=10)
+        
+        # 3. Topic Prevalence (Horizontal Bar Chart)
+        ax3 = fig.add_subplot(gs[1, 0])
+        topics_sorted = sorted(topic_counts.items(), key=lambda x: x[1][0], reverse=True)
+        topic_names = [t[0] for t in topics_sorted]
+        topic_values = [t[1][0] for t in topics_sorted]
+        topic_colors = plt.cm.plasma(np.linspace(0.2, 0.9, len(topic_names)))
+        bars = ax3.barh(range(len(topic_names)), topic_values, color=topic_colors, edgecolor='black', alpha=0.8)
+        ax3.set_yticks(range(len(topic_names)))
+        ax3.set_yticklabels(topic_names)
+        ax3.set_xlabel('Number of Bills', fontweight='bold', fontsize=11)
+        ax3.set_title('Topic Prevalence in Children-Focused Bills\n(N=204)', fontweight='bold', fontsize=13)
+        ax3.grid(axis='x', alpha=0.3)
+        ax3.invert_yaxis()
+        for i, (name, (count, pct)) in enumerate(topics_sorted):
+            ax3.text(count + 1, i, f'{count} ({pct:.1f}%)', va='center', fontweight='bold', fontsize=9)
+        
+        # 4. State Distribution (Pie Chart)
+        ax4 = fig.add_subplot(gs[1, 1])
+        state_bins = pd.cut(bills_per_state, bins=[0, 5, 15, 30, 100], labels=['Low (1-5)', 'Medium (6-15)', 'High (16-30)', 'Very High (31+)'])
+        state_distribution = state_bins.value_counts()
+        colors_pie = ['#e74c3c', '#f39c12', '#3498db', '#27ae60']
+        wedges, texts, autotexts = ax4.pie(state_distribution.values, labels=state_distribution.index, 
+                                           autopct='%1.1f%%', colors=colors_pie, startangle=90,
+                                           textprops={'fontweight': 'bold', 'fontsize': 10})
+        ax4.set_title('Distribution of State Legislative Activity\n(Bills Passed per State)', fontweight='bold', fontsize=13)
+        
+        # 5. Children-Focused vs All Bills (Comparison)
+        ax5 = fig.add_subplot(gs[2, 0])
+        categories = ['All Passed Bills', 'Children-Focused Bills']
+        values = [len(self.state_df), len(children_bills)]
+        colors_comp = ['#3498db', '#e74c3c']
+        bars = ax5.bar(categories, values, color=colors_comp, edgecolor='black', alpha=0.8, width=0.6)
+        ax5.set_ylabel('Number of Bills', fontweight='bold', fontsize=11)
+        ax5.set_title('Children-Focused Bills as Proportion of Total\n(Passed Bills Only)', fontweight='bold', fontsize=13)
+        ax5.grid(axis='y', alpha=0.3)
+        for i, (cat, val) in enumerate(zip(categories, values)):
+            pct = (val / len(self.state_df) * 100) if i == 1 else 100
+            ax5.text(i, val + 20, f'{val}\n({pct:.1f}%)', ha='center', fontweight='bold', fontsize=11)
+        
+        # 6. Bill Description Length Distribution (Histogram)
+        ax6 = fig.add_subplot(gs[2, 1])
+        desc_lengths = children_bills['Description'].str.len()
+        ax6.hist(desc_lengths, bins=30, color='#9b59b6', edgecolor='black', alpha=0.7)
+        ax6.axvline(desc_lengths.mean(), color='#e74c3c', linestyle='--', linewidth=2, label=f'Mean: {desc_lengths.mean():.0f}')
+        ax6.axvline(desc_lengths.median(), color='#27ae60', linestyle='--', linewidth=2, label=f'Median: {desc_lengths.median():.0f}')
+        ax6.set_xlabel('Description Length (characters)', fontweight='bold', fontsize=11)
+        ax6.set_ylabel('Number of Bills', fontweight='bold', fontsize=11)
+        ax6.set_title('Distribution of Bill Description Lengths\n(Children-Focused Bills)', fontweight='bold', fontsize=13)
+        ax6.legend(fontsize=10)
+        ax6.grid(axis='y', alpha=0.3)
+        
+        plt.savefig(f"{self.output_dir}/descriptive_statistics_dashboard.png", bbox_inches='tight', dpi=300)
+        plt.close()
+        
+        # Create additional detailed state comparison chart
+        fig2, (ax_a, ax_b) = plt.subplots(1, 2, figsize=(18, 8))
+        
+        # State bills - All vs Children-focused
+        states_with_children = children_bills['State'].value_counts().head(15)
+        all_bills_top = bills_per_state[states_with_children.index]
+        
+        x = np.arange(len(states_with_children))
+        width = 0.35
+        
+        bars1 = ax_a.bar(x - width/2, all_bills_top.values, width, label='All Bills', 
+                        color='#3498db', edgecolor='black', alpha=0.8)
+        bars2 = ax_a.bar(x + width/2, states_with_children.values, width, label='Children-Focused', 
+                        color='#e74c3c', edgecolor='black', alpha=0.8)
+        
+        ax_a.set_xlabel('State', fontweight='bold', fontsize=12)
+        ax_a.set_ylabel('Number of Bills', fontweight='bold', fontsize=12)
+        ax_a.set_title('All Bills vs Children-Focused Bills by State\n(Top 15 States with Children Legislation)', 
+                      fontweight='bold', fontsize=14)
+        ax_a.set_xticks(x)
+        ax_a.set_xticklabels(states_with_children.index, rotation=45, ha='right')
+        ax_a.legend(fontsize=11)
+        ax_a.grid(axis='y', alpha=0.3)
+        
+        # Percentage of children-focused bills
+        percentages = (states_with_children.values / all_bills_top.values * 100)
+        colors_pct = plt.cm.RdYlGn(percentages / 100)
+        bars = ax_b.barh(range(len(states_with_children)), percentages, color=colors_pct, 
+                        edgecolor='black', alpha=0.8)
+        ax_b.set_yticks(range(len(states_with_children)))
+        ax_b.set_yticklabels(states_with_children.index)
+        ax_b.set_xlabel('Percentage of Bills that are Children-Focused', fontweight='bold', fontsize=12)
+        ax_b.set_title('Children-Focus Rate by State\n(% of Passed Bills)', fontweight='bold', fontsize=14)
+        ax_b.grid(axis='x', alpha=0.3)
+        ax_b.invert_yaxis()
+        for i, (state, pct) in enumerate(zip(states_with_children.index, percentages)):
+            ax_b.text(pct + 1, i, f'{pct:.1f}%', va='center', fontweight='bold', fontsize=9)
+        
+        plt.tight_layout()
+        plt.savefig(f"{self.output_dir}/state_comparison_detailed.png", bbox_inches='tight', dpi=300)
+        plt.close()
+        
+        print("\n📊 Visualizations created:")
+        print("   - descriptive_statistics_dashboard.png (6-panel overview)")
+        print("   - state_comparison_detailed.png (state-level comparison)")
+    
     def analyze_geographic_inequity(self):
         """Analyze differences in protections across states"""
         print("="*80)
         print("GEOGRAPHIC INEQUITY ANALYSIS")
         print("="*80)
         
-        # Filter for children-related passed bills
+        # Filter for children-related bills (already filtered to passed bills only)
         children_keywords = ['child', 'minor', 'youth', 'student', 'teen', 'kid', 'adolescent']
-        mask = self.state_df['Status'].str.contains('Passed', na=False)
+        mask = pd.Series([False] * len(self.state_df), index=self.state_df.index)
         for keyword in children_keywords:
             mask |= (
                 self.state_df['Name'].str.contains(keyword, case=False, na=False) |
                 self.state_df['Description'].str.contains(keyword, case=False, na=False)
             )
         
-        children_passed = self.state_df[mask & self.state_df['Status'].str.contains('Passed', na=False)]
+        children_passed = self.state_df[mask]
         
         # Calculate protection scores by state
         protection_scores = {}
+        provision_laws = defaultdict(list)  # Track which laws implement each provision
         provisions = {
             'age_verification': ['age verif', 'age assurance', 'age check'],
             'data_privacy': ['data privacy', 'data protection', 'personal data', 'minimal collection'],
@@ -69,9 +350,20 @@ class EnhancedPolicyAnalyzer:
             
             for prov_name, keywords in provisions.items():
                 for keyword in keywords:
-                    if any(state_bills['Description'].str.contains(keyword, case=False, na=False)):
+                    matching_bills = state_bills[
+                        state_bills['Description'].str.contains(keyword, case=False, na=False)
+                    ]
+                    if not matching_bills.empty:
                         score += 1
                         provisions_present.append(prov_name)
+                        # Track the laws for this provision
+                        for _, bill in matching_bills.iterrows():
+                            law_name = f"{bill['State']} {bill['Name']}"
+                            provision_laws[prov_name].append({
+                                'state': bill['State'],
+                                'name': bill['Name'],
+                                'full_name': law_name
+                            })
                         break
             
             protection_scores[state] = {
@@ -142,13 +434,27 @@ class EnhancedPolicyAnalyzer:
         ])
         inequity_df.to_csv(f"{self.output_dir}/geographic_inequity_scores.csv", index=False)
         
+        # Save provision laws mapping
+        provision_laws_data = []
+        for provision, laws in provision_laws.items():
+            for law in laws:
+                provision_laws_data.append({
+                    'Provision': provision,
+                    'State': law['state'],
+                    'Law_Name': law['name'],
+                    'Full_Citation': law['full_name']
+                })
+        provision_laws_df = pd.DataFrame(provision_laws_data)
+        provision_laws_df.to_csv(f"{self.output_dir}/provision_laws_mapping.csv", index=False)
+        
         print(f"\n📊 Protection Score Analysis:")
         print(f"   High Protection States (6-8): {tiers['High (6-8)']} states")
         print(f"   Medium Protection States (4-5): {tiers['Medium (4-5)']} states")
         print(f"   Low Protection States (0-3): {tiers['Low (0-3)']} states")
         print(f"   Geographic Inequity Index: {np.std(all_scores):.2f} (higher = more unequal)")
+        print(f"   Laws mapped to provisions: {len(provision_laws_data)} law-provision pairs")
         
-        return inequity_df
+        return inequity_df, provision_laws
     
     def analyze_compliance_complexity(self):
         """Analyze regulatory burden and variation across states"""
@@ -156,7 +462,7 @@ class EnhancedPolicyAnalyzer:
         print("COMPLIANCE COMPLEXITY ANALYSIS")
         print("="*80)
         
-        passed_bills = self.state_df[self.state_df['Status'].str.contains('Passed', na=False)]
+        passed_bills = self.state_df  # Already filtered to passed bills only
         
         # Extract unique requirements across states
         requirements = {
@@ -170,14 +476,27 @@ class EnhancedPolicyAnalyzer:
             'Enforcement Mechanisms': ['attorney general', 'consumer protection', 'enforcement']
         }
         
-        # Track which states have which requirements
+        # Track which states have which requirements and which laws implement them
         state_requirements = defaultdict(list)
+        requirement_laws = defaultdict(list)
+        
         for state in passed_bills['State'].unique():
             state_bills = passed_bills[passed_bills['State'] == state]
             for req_name, keywords in requirements.items():
                 for keyword in keywords:
-                    if any(state_bills['Description'].str.contains(keyword, case=False, na=False)):
+                    matching_bills = state_bills[
+                        state_bills['Description'].str.contains(keyword, case=False, na=False)
+                    ]
+                    if not matching_bills.empty:
                         state_requirements[state].append(req_name)
+                        # Track the laws for this requirement
+                        for _, bill in matching_bills.iterrows():
+                            law_name = f"{bill['State']} {bill['Name']}"
+                            requirement_laws[req_name].append({
+                                'state': bill['State'],
+                                'name': bill['Name'],
+                                'full_name': law_name
+                            })
                         break
         
         # Create compliance complexity matrix
@@ -244,7 +563,23 @@ class EnhancedPolicyAnalyzer:
         compliance_df = compliance_df.sort_values('Total_Requirements', ascending=False)
         compliance_df.to_csv(f"{self.output_dir}/compliance_complexity_by_state.csv", index=False)
         
-        return compliance_df
+        # Save requirement laws mapping
+        requirement_laws_data = []
+        for requirement, laws in requirement_laws.items():
+            # Deduplicate laws
+            unique_laws = {law['full_name']: law for law in laws}
+            for law in unique_laws.values():
+                requirement_laws_data.append({
+                    'Requirement': requirement,
+                    'State': law['state'],
+                    'Law_Name': law['name'],
+                    'Full_Citation': law['full_name']
+                })
+        requirement_laws_df = pd.DataFrame(requirement_laws_data)
+        requirement_laws_df.to_csv(f"{self.output_dir}/requirement_laws_mapping.csv", index=False)
+        print(f"   Laws mapped to requirements: {len(requirement_laws_data)} law-requirement pairs")
+        
+        return compliance_df, requirement_laws
     
     def analyze_temporal_momentum(self):
         """Analyze legislative momentum and timing patterns"""
@@ -258,7 +593,7 @@ class EnhancedPolicyAnalyzer:
         # Filter for children-related bills
         children_keywords = ['child', 'minor', 'youth', 'student', 'teen', 'kid', 'adolescent',
                             'social media', 'online safety', 'data privacy', 'age verification']
-        mask = pd.Series([False] * len(self.state_df))
+        mask = pd.Series([False] * len(self.state_df), index=self.state_df.index)
         for keyword in children_keywords:
             mask |= (
                 self.state_df['Name'].str.contains(keyword, case=False, na=False) |
@@ -270,40 +605,37 @@ class EnhancedPolicyAnalyzer:
         # Analyze by year and status
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(18, 14))
         
-        # 1. Bills introduced over time
-        yearly_counts = children_bills.groupby(['Year', 'Status']).size().unstack(fill_value=0)
+        # 1. Passed bills over time
+        yearly_counts = children_bills.groupby('Year').size()
         yearly_counts = yearly_counts[yearly_counts.index.notna()]
         
-        if 'Passed' in yearly_counts.columns:
-            yearly_counts[['Introduced', 'Passed']].plot(kind='bar', ax=ax1, 
-                                                          color=['#3498db', '#27ae60'],
-                                                          edgecolor='black', alpha=0.8)
-        else:
-            yearly_counts['Introduced'].plot(kind='bar', ax=ax1, color='#3498db',
-                                            edgecolor='black', alpha=0.8)
+        yearly_counts.plot(kind='bar', ax=ax1, color='#27ae60',
+                          edgecolor='black', alpha=0.8)
         
         ax1.set_xlabel('Year', fontweight='bold', fontsize=12)
-        ax1.set_ylabel('Number of Bills', fontweight='bold', fontsize=12)
-        ax1.set_title('Youth Online Safety Legislative Activity by Year\n(Momentum Analysis)',
+        ax1.set_ylabel('Number of Passed Bills', fontweight='bold', fontsize=12)
+        ax1.set_title('Youth Online Safety Legislation Enacted by Year\n(Passed Bills Only)',
                      fontweight='bold', fontsize=14)
-        ax1.legend(fontsize=10)
         ax1.grid(axis='y', alpha=0.3)
         ax1.tick_params(axis='x', rotation=45)
         
-        # 2. Pass rate over time
-        if 'Passed' in yearly_counts.columns and 'Introduced' in yearly_counts.columns:
-            pass_rates = (yearly_counts['Passed'] / yearly_counts['Introduced'] * 100).dropna()
-            ax2.plot(pass_rates.index, pass_rates.values, marker='o', linewidth=3,
-                    color='#e74c3c', markersize=10)
-            ax2.fill_between(pass_rates.index, pass_rates.values, alpha=0.3, color='#e74c3c')
-            ax2.set_xlabel('Year', fontweight='bold', fontsize=12)
-            ax2.set_ylabel('Pass Rate (%)', fontweight='bold', fontsize=12)
-            ax2.set_title('Legislative Success Rate Over Time\n(Effectiveness Trend)',
-                         fontweight='bold', fontsize=14)
-            ax2.grid(True, alpha=0.3)
-            
-            for x, y in zip(pass_rates.index, pass_rates.values):
-                ax2.text(x, y + 1, f'{y:.1f}%', ha='center', fontweight='bold', fontsize=9)
+        # Add counts on bars
+        for i, v in enumerate(yearly_counts.values):
+            ax1.text(i, v + 0.5, str(int(v)), ha='center', va='bottom', fontweight='bold', fontsize=9)
+        
+        # 2. Cumulative passed bills over time
+        cumulative = yearly_counts.cumsum()
+        ax2.plot(cumulative.index, cumulative.values, marker='o', linewidth=3,
+                color='#e74c3c', markersize=10)
+        ax2.fill_between(cumulative.index, cumulative.values, alpha=0.3, color='#e74c3c')
+        ax2.set_xlabel('Year', fontweight='bold', fontsize=12)
+        ax2.set_ylabel('Cumulative Passed Bills', fontweight='bold', fontsize=12)
+        ax2.set_title('Cumulative Legislative Progress\n(Total Enacted Laws)',
+                     fontweight='bold', fontsize=14)
+        ax2.grid(True, alpha=0.3)
+        
+        for x, y in zip(cumulative.index, cumulative.values):
+            ax2.text(x, y + 2, str(int(y)), ha='center', fontweight='bold', fontsize=9)
         
         # 3. Top active states by year
         recent_years = children_bills[children_bills['Year'] >= 2023]
@@ -369,7 +701,7 @@ class EnhancedPolicyAnalyzer:
         print("EVIDENCE GAPS & DATA NEEDS ANALYSIS")
         print("="*80)
         
-        passed_bills = self.state_df[self.state_df['Status'].str.contains('Passed', na=False)]
+        passed_bills = self.state_df  # Already filtered to passed bills only
         
         # Key areas where data is often missing or insufficient
         evidence_areas = {
@@ -484,8 +816,9 @@ class EnhancedPolicyAnalyzer:
         
         return gap_df
     
-    def generate_federal_framework_recommendations(self, inequity_df, compliance_df):
-        """Generate comprehensive federal framework recommendations"""
+    def generate_federal_framework_recommendations(self, inequity_df, compliance_df, 
+                                                          provision_laws, requirement_laws):
+        """Generate comprehensive federal framework recommendations with law citations"""
         print("\n" + "="*80)
         print("FEDERAL FRAMEWORK RECOMMENDATIONS")
         print("="*80)
@@ -568,6 +901,19 @@ class EnhancedPolicyAnalyzer:
             f.write("### High-Protection States (Models for Federal Standards)\n")
             for _, row in inequity_df[inequity_df['Tier'] == 'High'].head(5).iterrows():
                 f.write(f"- **{row['State']}**: {row['Protection_Score']} provisions, {row['Bills_Passed']} bills\n")
+            
+            # Add example laws for each provision
+            f.write("\n### Example Laws by Provision Type\n\n")
+            for provision in sorted(provision_laws.keys()):
+                laws = provision_laws[provision]
+                unique_laws = {law['full_name']: law for law in laws}
+                if unique_laws:
+                    f.write(f"**{provision.replace('_', ' ').title()}:**\n")
+                    for law in list(unique_laws.values())[:5]:  # Top 5 examples
+                        f.write(f"  - {law['full_name']}\n")
+                    if len(unique_laws) > 5:
+                        f.write(f"  - ...and {len(unique_laws) - 5} more\n")
+                    f.write("\n")
         
         print("\n✅ Federal framework recommendations saved")
         print(f"📄 File: {self.output_dir}/FEDERAL_FRAMEWORK_RECOMMENDATIONS.md")
@@ -577,17 +923,22 @@ class EnhancedPolicyAnalyzer:
         print("="*80)
         print("ENHANCED ANALYSIS FOR MIT HACKATHON")
         print("Youth Online Safety Federal Framework Development")
+        print("Analysis of PASSED BILLS ONLY")
         print("="*80)
         print()
         
+        # Generate descriptive statistics first
+        children_bills = self.generate_descriptive_statistics()
+        
         # Run all analyses
-        inequity_df = self.analyze_geographic_inequity()
-        compliance_df = self.analyze_compliance_complexity()
+        inequity_df, provision_laws = self.analyze_geographic_inequity()
+        compliance_df, requirement_laws = self.analyze_compliance_complexity()
         momentum_df = self.analyze_temporal_momentum()
         gaps_df = self.analyze_evidence_gaps()
         
-        # Generate recommendations
-        self.generate_federal_framework_recommendations(inequity_df, compliance_df)
+        # Generate recommendations with law citations
+        self.generate_federal_framework_recommendations(inequity_df, compliance_df, 
+                                                       provision_laws, requirement_laws)
         
         print("\n" + "="*80)
         print("ANALYSIS COMPLETE")
@@ -595,14 +946,22 @@ class EnhancedPolicyAnalyzer:
         print(f"\n📁 All results saved to: {self.output_dir}")
         print("\n📊 Generated Files:")
         print("   Visualizations:")
+        print("   - descriptive_statistics_dashboard.png (NEW: 6-panel overview)")
+        print("   - state_comparison_detailed.png (NEW: state-level analysis)")
         print("   - geographic_inequity_analysis.png")
         print("   - compliance_complexity_matrix.png")
         print("   - legislative_momentum_analysis.png")
         print("   - evidence_gaps_analysis.png")
         print("\n   Data Tables:")
+        print("   - summary_statistics.csv (NEW: Dataset overview metrics)")
+        print("   - topic_prevalence.csv (NEW: Topic distribution across bills)")
         print("   - geographic_inequity_scores.csv")
         print("   - compliance_complexity_by_state.csv")
         print("   - evidence_gaps_priority.csv")
+        print("   - provision_laws_mapping.csv (Laws by provision type)")
+        print("   - requirement_laws_mapping.csv (Laws by requirement)")
+        print("\n   Reports:")
+        print("   - descriptive_statistics.txt (NEW: Comprehensive statistics report)")
         print("\n   Policy Documents:")
         print("   - FEDERAL_FRAMEWORK_RECOMMENDATIONS.md")
         print("\n✅ Enhanced analysis complete!")
@@ -611,8 +970,8 @@ class EnhancedPolicyAnalyzer:
 if __name__ == "__main__":
     # Initialize analyzer
     analyzer = EnhancedPolicyAnalyzer(
-        state_file="Technology Policy Tracking - Updated - US State.csv",
-        federal_file="Technology Policy Tracking - Updated - US Federal.csv"
+        state_file="../../Technology Policy Tracking - Updated - US State.csv",
+        federal_file="../../Technology Policy Tracking - Updated - US Federal.csv"
     )
     
     # Run full analysis

@@ -1,0 +1,46 @@
+\n=== DATASET OVERVIEW ===
+Total passed bills analyzed: 913
+Number of states/territories: 52
+Date range: 2023-01-10 to 2025-06-17
+
+Children-focused bills: 204 (22.3%)
+States with children-focused legislation: 41
+
+=== STATE-LEVEL STATISTICS ===
+Bills per state (mean): 17.56
+Bills per state (median): 10
+Bills per state (std dev): 18.44
+Bills per state (min): 1
+Bills per state (max): 85
+
+Top 5 most active states:
+  California: 85 bills
+  Tennessee: 67 bills
+  Virginia: 64 bills
+  New York: 56 bills
+  Illinois: 54 bills
+
+=== TEMPORAL TRENDS ===
+Bills by year (mean): 243.00
+Bills by year (median): 248
+Peak year: 2024.0 (321 bills)
+
+Yearly breakdown:
+  2023: 160 bills
+  2024: 321 bills
+  2025: 248 bills
+
+=== TOPIC PREVALENCE ===
+Age Verification: 31 bills (15.2%)
+Data Privacy: 27 bills (13.2%)
+Platform Liability: 21 bills (10.3%)
+Mental Health: 18 bills (8.8%)
+Transparency: 25 bills (12.3%)
+Education: 50 bills (24.5%)
+Parental Control: 16 bills (7.8%)
+Content Safety: 8 bills (3.9%)
+
+=== BILL DESCRIPTION CHARACTERISTICS ===
+Description length (mean): 618 characters
+Description length (median): 600 characters
+Description length (std dev): 217 characters
